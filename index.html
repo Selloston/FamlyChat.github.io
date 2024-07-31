@@ -1,12 +1,119 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Family Chat</title>
+    <link rel="icon" type="image/png" href="Photos/chat-bubble.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    
+    <div id="infodiv">
+            <div id="infoID">
+
+            </div>
+        <div id="rules">
+            <h3> : القواعد</h3>
+            <p dir="rtl" lang="ar">
+                1 - ممنوع منع باتا السب او التنمر او السخريه من احد و إن وجدت رساله مثل هذه يتم حذفها فورا
+                <br>2 - ممنوع اخبار اي احد عن اسمك او من تخون 
+                <br>3 - ستدخل انت و اي شخص اخر قد صنع حساب للسرفر لن يكون بوسعك معرفه اي هويه عن الشخص الذي تحدثه 
+            </p>
+        </div>
+    </div>
+    <div id="information">
+        <i class="fa-solid fa-circle-info"></i>
+    </div>
+    <div id="allChatContaner">
+        <div class="chat-container">
+            <div class="chat-box" id="chat-box"></div>
+            <div id="massege"></div>
+            <div class="input-container">
+                <input type="text" id="message-input" placeholder="اكتب رسالتك هنا...">
+                <button id="send-button" onclick="modlue.sendMsg()">إرسال</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        modlue = {};
+    </script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+        import { getAuth, onAuthStateChanged  } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+        import { getDatabase, set, ref, remove, onChildAdded } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-database.js";
+
+
+const firebaseConfig = {
+    apiKey: "AIzaSyDq8LmdcyIj-JlXFHhPuD8j3tVouJeo6EY",
+    authDomain: "chat-5f469.firebaseapp.com",
+    projectId: "chat-5f469",
+    storageBucket: "chat-5f469.appspot.com",
+    messagingSenderId: "179856152021",
+    appId: "1:179856152021:web:5909749958e1216680995c"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    const auth = getAuth();
+
+    let massege = document.getElementById("message-input");
+    let masseges = document.getElementById("massege");
+    let num;
+    if(sessionStorage.getItem("num"))
+    {
+        num = sessionStorage.getItem("num")
+    }
+    else
+    {
+        num = prompt("ادخل رقم عشوائي");
+        sessionStorage.setItem("num", num)
+    }
+
+    modlue.sendMsg = function sendMsg()
+    {
+        if(massege.value.trim())
+        {
+            let msg = massege.value;
+        let timestamp = new Date().getTime();
+        set(ref(db, "massege/" + timestamp), {
+            msg: msg,
+            num: num,
+        })
+        massege.value = "";
+        massege.focus();
+        }
+    }
+
+    onChildAdded(ref(db, "massege"), (data) => {
+        onAuthStateChanged(auth, (user) => {
+        if(user.uid == user.uid)
+        {
+            const ID = user.uid;
+            masseges.innerHTML += "<div id=contanerTextme> "+data.val().msg+" </div>"
+        }
+        else
+        {
+            masseges.innerHTML += "<div id=contanerTextyou> "+data.val().msg+" </div>"
+        }
+        })
+
+    })
+
+    onAuthStateChanged(auth, (user) => {
+        let infoID = document.getElementById("infoID")
+
+  if (user) {
+    const ID = user.uid;
+    infoID.innerHTML = "<dive id=idContaner>"+ID+" : أسمك هو</div>"
+  } else {
+    console.log("User not logged in")
+  }
+})
+
+    </script>
+    <script src="chat.js"></script>
 </body>
 </html>

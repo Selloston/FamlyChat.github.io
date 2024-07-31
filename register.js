@@ -1,7 +1,7 @@
         // Import the functions you need from the SDKs you need
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
         import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
-        import { getDatabase,set,ref,update } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-database.js";
+        import { getDatabase,set,ref } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-database.js";
         // TODO: Add SDKs for Firebase products that you want to use
         // https://firebase.google.com/docs/web/setup#available-libraries
     
@@ -24,6 +24,7 @@ register.addEventListener("click", (e) =>
         {
             let email = document.getElementById("email").value;
             let password = document.getElementById("password").value;
+            
         
             createUserWithEmailAndPassword(auth, email, password)
 .then((userCredential) => {
@@ -32,7 +33,7 @@ register.addEventListener("click", (e) =>
     // ...
     set(ref(database, 'users/' + user.uid), {
         email: email,
-        password: password
+        password: password,
 })
     .then(() => {
   // Data saved successfully!
