@@ -89,7 +89,9 @@ const firebaseConfig = {
 
     onChildAdded(ref(db, "massege"), (data) => {
         onAuthStateChanged(auth, (user) => {
-        if(user.uid == user.uid)
+            if(data.val().num == num)
+            {
+                if(user.uid == user.uid)
         {
             const ID = user.uid;
             masseges.innerHTML += "<div id=contanerTextme> "+data.val().msg+" </div>"
@@ -98,6 +100,11 @@ const firebaseConfig = {
         {
             masseges.innerHTML += "<div id=contanerTextyou> "+data.val().msg+" </div>"
         }
+            }
+            else
+            {
+                prompt("You Dont Enter The Number")
+            }
         })
 
     })
